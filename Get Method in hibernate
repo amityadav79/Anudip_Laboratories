@@ -1,0 +1,90 @@
+# In your Hibernate project, you used the get() method to fetch a student object with an ID that doesn't exist in the database. What will be the result, and how would you handle it?
+
+package com.example.Students;
+
+import org.hibernate.Session;
+
+import com.example.Students.HibernateUtils.HibernateUtils;
+import com.example.Students.entities.Student;
+
+public class RetriveUsingGetMethod {
+
+	public static void main(String[] args) 
+	{
+		 /*----- Creating Session using SessionFactory -------------*/
+    	Session session=HibernateUtils.getSessionFactory().openSession();
+    	/*-----------------------------------------------------------------*/
+    	/*---- Fetching data of Entity ------*/
+    	Student s1=session.get(Student.class, "std111");
+    	System.out.println("------------------------------------------------------");
+    	if(s1!=null)
+    	{
+    		System.out.println(s1);
+    	}
+    	else
+    	{
+    		System.out.println("Object not found");
+    	}
+    	/*----- Close sessionFactory -------------*/
+    	HibernateUtils.shutdown();
+	}
+
+}
+
+##Output if Id doesn't exist in the database
+
+Aug 01, 2024 12:55:38 PM org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate ORM core version 5.6.15.Final
+Aug 01, 2024 12:55:39 PM org.hibernate.annotations.common.reflection.java.JavaReflectionManager <clinit>
+INFO: HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+Aug 01, 2024 12:55:39 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl configure
+WARN: HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+Aug 01, 2024 12:55:39 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001005: using driver [com.mysql.cj.jdbc.Driver] at URL [jdbc:mysql://localhost:3306/anp8230data]
+Aug 01, 2024 12:55:39 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001001: Connection properties: {password=****, user=root}
+Aug 01, 2024 12:55:39 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl buildCreator
+INFO: HHH10001003: Autocommit mode: false
+Aug 01, 2024 12:55:39 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl$PooledConnections <init>
+INFO: HHH000115: Hibernate connection pool size: 20 (min=1)
+Aug 01, 2024 12:55:40 PM org.hibernate.dialect.Dialect <init>
+INFO: HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+Aug 01, 2024 12:55:41 PM org.hibernate.resource.transaction.backend.jdbc.internal.DdlTransactionIsolatorNonJtaImpl getIsolatedConnection
+INFO: HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@44b29496] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+Aug 01, 2024 12:55:41 PM org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator initiateService
+INFO: HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+Hibernate: 
+    select
+        student0_.Studentid as studenti1_0_0_,
+        student0_.Age as age2_0_0_,
+        student0_.RollNo as rollno3_0_0_,
+        student0_.Standard as standard4_0_0_,
+        student0_.StudentName as studentn5_0_0_ 
+    from
+        Student student0_ 
+    where
+        student0_.Studentid=?
+------------------------------------------------------
+Object not found
+Aug 01, 2024 12:55:41 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl$PoolState stop
+INFO: HHH10001008: Cleaning up connection pool [jdbc:mysql://localhost:3306/anp8230data]
+
+##how would you handle it?
+Session Initialization:
+
+You open a session using HibernateUtils.getSessionFactory().openSession().
+Fetching the Entity:
+
+You use session.get(Student.class, "std111") to fetch the Student entity with ID "std111".
+Null Check:
+
+You check if s1 is null.
+If s1 is not null, you print the Student object.
+If s1 is null, you print "Object not found".
+Session and SessionFactory Closing:
+
+Ensure that you close the session with session.close() after you're done with it.
+Then, shutdown the SessionFactory using HibernateUtils.shutdown()
+
+
+
